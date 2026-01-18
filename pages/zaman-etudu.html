@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaman Etüdü - Norm Kadro</title>
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                    <a href="zaman-etudu.html" class="nav-link active">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Etüdü</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Zaman Etüdü Hesaplayıcı</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="temizleEtud()">
+                        <i data-lucide="trash-2"></i>
+                        Temizle
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="grid grid-cols-2">
+                    <!-- Gözlem Girişi -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="timer"></i>
+                                Gözlem Girişi
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Görev (Opsiyonel)</label>
+                                <select class="form-select" id="etudGorevSelect">
+                                    <option value="">Görev seçin...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Gözlem Süresi (dakika)</label>
+                                <div class="flex gap-2">
+                                    <input type="number" class="form-input" id="gozlemInput" step="0.01" min="0"
+                                        placeholder="Süre girin">
+                                    <button type="button" class="btn btn-primary" onclick="addGozlem()">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Gözlemler</label>
+                                <div id="gozlemlerList" class="flex flex-wrap gap-2">
+                                    <p class="text-muted">Henüz gözlem eklenmedi</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="aykiriVeriToggle" onchange="hesaplaEtudSonuclari()">
+                                    <span>Aykırı verileri hariç tut (IQR yöntemi)</span>
+                                </label>
+                                <div class="form-hint">İşaretlendiğinde, dağılımda aykırı olan gözlemler hesaplamadan
+                                    çıkarılır</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sonuçlar -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="bar-chart-2"></i>
+                                Sonuçlar
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="time-study-results">
+                                <div class="result-item">
+                                    <div class="label">Gözlem Sayısı</div>
+                                    <div class="value" id="etudSayi">0</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="label">Ortalama</div>
+                                    <div class="value" id="etudOrtalama">0 dk</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="label">Std. Sapma</div>
+                                    <div class="value" id="etudStdSapma">0 dk</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="label">Min</div>
+                                    <div class="value" id="etudMin">0 dk</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="label">Max</div>
+                                    <div class="value" id="etudMax">0 dk</div>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-2 mt-4">
+                                <button class="btn btn-success" onclick="kullanOrtalama()">
+                                    <i data-lucide="save"></i>
+                                    Ortalamayı Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/zaman-etudu.js"></script>
+
+    <script>
+        // Service Worker kayıt
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../service-worker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+    </script>
+</body>
+
+</html>
+

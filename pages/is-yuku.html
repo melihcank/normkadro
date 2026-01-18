@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>İş Yükü - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link active">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">İş Yükü</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openNewIsYukuModal()">
+                        <i data-lucide="plus"></i>
+                        Yeni İş Yükü
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i data-lucide="bar-chart-3"></i>
+                            İş Yükü Verileri
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Pozisyon</th>
+                                        <th>Görev</th>
+                                        <th class="text-right">Hacim</th>
+                                        <th>Birim</th>
+                                        <th>Periyot</th>
+                                        <th style="width: 100px">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="isYukuTable">
+                                    <!-- Dinamik olarak doldurulacak -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- İş Yükü Modal -->
+    <div class="modal-overlay" id="isYukuModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Yeni İş Yükü</h3>
+                <button class="modal-close" data-close-modal>
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="isYukuForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label required">Görev</label>
+                        <select class="form-select" id="gorevSelect" required>
+                            <option value="">Görev seçin...</option>
+                        </select>
+                        <div class="form-hint">Önce İş Analizi sayfasından görev tanımlayın</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Hacim</label>
+                            <input type="number" class="form-input" id="hacim" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Birim</label>
+                            <select class="form-select" id="birim">
+                                <option value="adet">Adet</option>
+                                <option value="sayfa">Sayfa</option>
+                                <option value="form">Form</option>
+                                <option value="dosya">Dosya</option>
+                                <option value="işlem">İşlem</option>
+                                <option value="kayıt">Kayıt</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Periyot</label>
+                        <select class="form-select" id="periyot">
+                            <option value="günlük">Günlük</option>
+                            <option value="haftalık">Haftalık</option>
+                            <option value="aylık" selected>Aylık</option>
+                            <option value="yıllık">Yıllık</option>
+                        </select>
+                        <div class="form-hint">İş hacminin gerçekleşme sıklığı</div>
+                    </div>
+
+                    <!-- Mevsimsel İş Yükü Bölümü -->
+                    <div class="form-group"
+                        style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <input type="checkbox" id="mevsimselAktif" class="form-checkbox"
+                                onchange="toggleMevsimselPanel()">
+                            <label for="mevsimselAktif" style="font-weight: 500; cursor: pointer;">
+                                <i data-lucide="calendar"
+                                    style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
+                                Mevsimsel dalgalanma uygula
+                            </label>
+                        </div>
+
+                        <div id="mevsimselPanel" style="display: none;">
+                            <div class="form-group" style="margin-bottom: 0.75rem;">
+                                <label class="form-label">Şablon</label>
+                                <select class="form-select" id="mevsimselSablon" onchange="applyMevsimselSablon()">
+                                    <option value="">Şablon seçin...</option>
+                                    <option value="sabit">Sabit (tüm aylar 1.0)</option>
+                                    <option value="muhasebe">Muhasebe/Mali İşler</option>
+                                    <option value="satis">Satış/Pazarlama</option>
+                                    <option value="ik">İnsan Kaynakları</option>
+                                    <option value="yaz_dusuk">Yaz Tatili Etkili</option>
+                                </select>
+                            </div>
+
+                            <div
+                                style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; margin-bottom: 0.75rem;">
+                                <div class="mevsimsel-ay">
+                                    <label>Oca</label>
+                                    <input type="number" id="ay1" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Şub</label>
+                                    <input type="number" id="ay2" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Mar</label>
+                                    <input type="number" id="ay3" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Nis</label>
+                                    <input type="number" id="ay4" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>May</label>
+                                    <input type="number" id="ay5" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Haz</label>
+                                    <input type="number" id="ay6" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Tem</label>
+                                    <input type="number" id="ay7" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Ağu</label>
+                                    <input type="number" id="ay8" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Eyl</label>
+                                    <input type="number" id="ay9" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Eki</label>
+                                    <input type="number" id="ay10" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Kas</label>
+                                    <input type="number" id="ay11" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                                <div class="mevsimsel-ay">
+                                    <label>Ara</label>
+                                    <input type="number" id="ay12" class="form-input mevsimsel-input" value="1.0"
+                                        step="0.05" min="0.1" max="3.0" onchange="updateMevsimselPreview()">
+                                </div>
+                            </div>
+
+                            <div id="mevsimselPreview" class="mevsimsel-preview" style="display: none;">
+                                <!-- Dinamik olarak doldurulacak -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/is-yuku.js"></script>
+</body>
+
+</html>
+
+

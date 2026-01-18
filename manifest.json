@@ -1,0 +1,26 @@
+{
+    "name": "Norm Kadro Hesaplama Sistemi",
+    "short_name": "Norm Kadro",
+    "description": "İş yükü analizi ve norm kadro hesaplama uygulaması",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#3b82f6",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["business", "productivity"],
+    "lang": "tr"
+}

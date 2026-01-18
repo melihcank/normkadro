@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>Organizasyon Şeması - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link active">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Organizasyon Şeması</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="exportOrgPDF()">
+                        <i data-lucide="file-text"></i>
+                        PDF
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div class="org-container">
+                        <div class="org-viewport" id="orgViewport">
+                            <div class="org-canvas" id="orgCanvas">
+                                <!-- Org chart will be rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- Zoom Controls -->
+                        <div class="org-controls">
+                            <button onclick="zoomOut()" title="Uzaklaştır">
+                                <i data-lucide="minus"></i>
+                            </button>
+                            <button onclick="resetZoom()" title="Sıfırla" style="width: auto; padding: 0 0.5rem;">
+                                <span id="zoomLevel" style="font-size: 0.75rem;">100%</span>
+                            </button>
+                            <button onclick="zoomIn()" title="Yakınlaştır">
+                                <i data-lucide="plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        style="padding: 0.75rem 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary);">
+                        <span class="text-muted" style="font-size: 0.8125rem;">
+                            <i data-lucide="info" style="width: 14px; height: 14px; display: inline;"></i>
+                            Pozisyona tıklayarak detayları görüntüleyin. Ctrl + Scroll ile zoom. Sürükleyerek kaydırın.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title" id="detailTitle">Pozisyon Detayı</h3>
+                <button class="modal-close" data-close-modal>
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detailContent">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close-modal>Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/organizasyon.js"></script>
+</body>
+
+</html>
+
+

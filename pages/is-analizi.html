@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>İş Analizi - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link active">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">İş Analizi</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openNewPozisyonModal()">
+                        <i data-lucide="plus"></i>
+                        Yeni Pozisyon
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i data-lucide="briefcase"></i>
+                            Pozisyonlar ve Görevler
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Pozisyon Adı</th>
+                                        <th>Üst Pozisyon</th>
+                                        <th>Departman</th>
+                                        <th class="text-center">Mevcut Kişi</th>
+                                        <th class="text-center">Görev Sayısı</th>
+                                        <th>Açıklama</th>
+                                        <th style="width: 100px">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pozisyonlarTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Pozisyon Modal -->
+    <div class="modal-overlay" id="pozisyonModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Yeni Pozisyon</h3>
+                <button class="modal-close" data-close-modal>
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="pozisyonForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label required">Pozisyon Adı</label>
+                        <input type="text" class="form-input" id="pozisyonAdi" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Üst Pozisyon (Bağlı Olduğu)</label>
+                        <select class="form-select" id="ustPozisyon">
+                            <option value="">Üst pozisyon yok (en üst seviye)</option>
+                        </select>
+                        <div class="form-hint">Organizasyon şemasında hangi pozisyonun altında yer alacağını belirler
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Departman</label>
+                        <input type="text" class="form-input" id="departman" list="departmanList"
+                            placeholder="Departman seçin veya yeni yazın">
+                        <datalist id="departmanList"></datalist>
+                        <div class="form-hint">Mevcut departmanlardan seçebilir veya yeni departman yazabilirsiniz</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Açıklama</label>
+                        <textarea class="form-textarea" id="aciklama" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/is-analizi.js"></script>
+</body>
+
+</html>
+
+

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>Standart Zaman - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link active">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Standart Zaman</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openNewStandartZamanModal()">
+                        <i data-lucide="plus"></i>
+                        Yeni Standart Zaman
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Standart Zaman Tablosu -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i data-lucide="clock"></i>
+                            Standart Zaman Verileri
+                        </h2>
+                        <a href="zaman-etudu.html" class="btn btn-secondary btn-sm" style="margin-left: auto;">
+                            <i data-lucide="timer"></i>
+                            Zaman Etüdü
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Pozisyon</th>
+                                        <th>Görev</th>
+                                        <th class="text-right">Süre</th>
+                                        <th>Birim</th>
+                                        <th style="width: 100px">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="standartZamanTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Standart Zaman Modal -->
+    <div class="modal-overlay" id="standartZamanModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Yeni Standart Zaman</h3>
+                <button class="modal-close" data-close-modal>
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="standartZamanForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label required">Görev</label>
+                        <select class="form-select" id="gorevSelect" required>
+                            <option value="">Görev seçin...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Standart Süre</label>
+                            <input type="number" class="form-input" id="standartSure" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Birim</label>
+                            <select class="form-select" id="zamanBirim">
+                                <option value="saniye">Saniye</option>
+                                <option value="dakika" selected>Dakika</option>
+                                <option value="saat">Saat</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/standart-zaman.js"></script>
+</body>
+
+</html>
+
+

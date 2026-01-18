@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>Personel - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link active">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Personel Yönetimi</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openNewPersonelModal()">
+                        <i data-lucide="user-plus"></i>
+                        Yeni Personel
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Filtreler -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group" style="margin-bottom:0">
+                                <label class="form-label">Pozisyon Filtresi</label>
+                                <select class="form-select" id="filterPozisyon">
+                                    <option value="">Tüm Pozisyonlar</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label class="form-label">Durum Filtresi</label>
+                                <select class="form-select" id="filterDurum">
+                                    <option value="">Tümü</option>
+                                    <option value="aktif">Aktif</option>
+                                    <option value="pasif">Pasif</option>
+                                    <option value="izinli">İzinli</option>
+                                </select>
+                            </div>
+                            <div class="form-group flex items-end" style="margin-bottom:0">
+                                <span class="badge badge-primary">
+                                    <span id="personelCount">0</span> personel
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personel Tablosu -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i data-lucide="users"></i>
+                            Personel Listesi
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Personel No</th>
+                                        <th>Ad Soyad</th>
+                                        <th>Pozisyon</th>
+                                        <th>Departman</th>
+                                        <th>E-posta</th>
+                                        <th>Durum</th>
+                                        <th style="width: 100px">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="personelTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Personel Modal -->
+    <div class="modal-overlay" id="personelModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Yeni Personel</h3>
+                <button class="modal-close" data-close-modal>
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="personelForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label required">Personel No</label>
+                        <input type="text" class="form-input" id="personelNo" required placeholder="Örn: P001">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Ad</label>
+                            <input type="text" class="form-input" id="ad" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Soyad</label>
+                            <input type="text" class="form-input" id="soyad" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Pozisyon</label>
+                        <div class="flex gap-2">
+                            <select class="form-select" id="pozisyonSelect" style="flex:1">
+                                <option value="">Pozisyon seçin...</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary btn-icon" onclick="openNewPozisyonModal()"
+                                title="Yeni Pozisyon Ekle">
+                                <i data-lucide="plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">E-posta</label>
+                            <input type="email" class="form-input" id="email" placeholder="ornek@sirket.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefon</label>
+                            <input type="tel" class="form-input" id="telefon" placeholder="0532 XXX XX XX">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select class="form-select" id="durum">
+                            <option value="aktif">Aktif</option>
+                            <option value="pasif">Pasif</option>
+                            <option value="izinli">İzinli</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pozisyon Modal (Quick Add) -->
+    <div class="modal-overlay" id="pozisyonModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Yeni Pozisyon</h3>
+                <button class="modal-close" onclick="closeModal('pozisyonModal')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="pozisyonForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label required">Pozisyon Adı</label>
+                        <input type="text" class="form-input" id="newPozisyonAdi" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Üst Pozisyon</label>
+                        <select class="form-select" id="newUstPozisyon">
+                            <option value="">Üst pozisyon yok</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Departman</label>
+                        <input type="text" class="form-input" id="newDepartman" list="departmanList"
+                            placeholder="Departman seçin veya yeni yazın">
+                        <datalist id="departmanList"></datalist>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('pozisyonModal')">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/personel.js"></script>
+</body>
+
+</html>
+
+

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>Hesaplama - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link active">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Norm Kadro Hesaplama</h1>
+                <div class="header-actions"></div>
+            </header>
+
+            <div class="page-content">
+                <!-- Parametre Kartı -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i data-lucide="settings"></i>
+                            Hesaplama Parametreleri
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- Hesaplama Modu Seçimi -->
+                        <div class="form-group mb-4">
+                            <label class="form-label">Hesaplama Modu</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="hesaplamaModu" value="genel" checked
+                                        onchange="toggleHesaplamaModu()">
+                                    <span>Genel Hesaplama</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="hesaplamaModu" value="pozisyon"
+                                        onchange="toggleHesaplamaModu()">
+                                    <span>Pozisyon Bazlı Hesaplama</span>
+                                </label>
+                            </div>
+                            <div class="form-hint">Pozisyon bazlı hesaplamada her pozisyon için ayrı çalışma saati ve
+                                verimlilik belirleyebilirsiniz</div>
+                        </div>
+
+                        <!-- Dağıtım Yöntemi Seçimi -->
+                        <div class="form-group mb-4">
+                            <label class="form-label">
+                                <i data-lucide="git-fork"
+                                    style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
+                                Paylaşımlı Görev Dağıtımı
+                            </label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="dagitimYontemi" value="oransal" checked>
+                                    <span>Oransal Dağıtım</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="dagitimYontemi" value="optimize">
+                                    <span>Kademeli Dağıtım (Öncelik Bazlı)</span>
+                                </label>
+                            </div>
+                            <div class="form-hint" style="margin-top: 6px;">
+                                <strong>Oransal:</strong> Paylaşımlı görevler, yapan kişi sayısına göre
+                                orantılı dağıtılır<br>
+                                <strong>Kademeli:</strong> Görev matrisindeki önceliğe göre dağıtılır (⭐⭐⭐⭐⭐ önce,
+                                kapasite yetmezse ⭐⭐⭐⭐ alır...)
+                            </div>
+                        </div>
+
+                        <!-- Genel Parametreler -->
+                        <div id="genelParametreler">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Aylık Çalışma Saati</label>
+                                    <input type="number" class="form-input" id="aylikCalisma" value="160" min="1">
+                                    <div class="form-hint">Bir çalışanın aylık toplam çalışma saati</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Verimlilik Katsayısı</label>
+                                    <input type="number" class="form-input" id="verimlilik" value="0.85" min="0.1"
+                                        max="1" step="0.05">
+                                    <div class="form-hint">0-1 arası (örn: 0.85 = %85 verimlilik)</div>
+                                </div>
+                            </div>
+
+                            <!-- Dönem Seçimi -->
+                            <div class="form-group mt-4"
+                                style="padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                <label class="form-label">
+                                    <i data-lucide="calendar"
+                                        style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
+                                    Dönem Seçimi
+                                </label>
+                                <div class="flex gap-4 flex-wrap">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="donemSecimi" value="yillik" checked
+                                            onchange="toggleDonemAySecimi()">
+                                        <span>Yıllık Ortalama</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="donemSecimi" value="pik"
+                                            onchange="toggleDonemAySecimi()">
+                                        <span>Pik Dönem (en yoğun 3 ay)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="donemSecimi" value="belirli"
+                                            onchange="toggleDonemAySecimi()">
+                                        <span>Belirli Ay</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="donemSecimi" value="dusuk"
+                                            onchange="toggleDonemAySecimi()">
+                                        <span>Düşük Dönem (en sakin 3 ay)</span>
+                                    </label>
+                                </div>
+                                <div id="aySecimi" style="display: none; margin-top: 0.5rem;">
+                                    <select class="form-select" id="secilenAy" style="width: 200px;">
+                                        <option value="1">Ocak</option>
+                                        <option value="2">Şubat</option>
+                                        <option value="3">Mart</option>
+                                        <option value="4">Nisan</option>
+                                        <option value="5">Mayıs</option>
+                                        <option value="6">Haziran</option>
+                                        <option value="7">Temmuz</option>
+                                        <option value="8">Ağustos</option>
+                                        <option value="9">Eylül</option>
+                                        <option value="10">Ekim</option>
+                                        <option value="11">Kasım</option>
+                                        <option value="12">Aralık</option>
+                                    </select>
+                                </div>
+                                <div class="form-hint">Mevsimsel iş yükü tanımlanmış görevler için dönem bazlı hesaplama
+                                    yapılır</div>
+                            </div>
+
+                            <!-- Öncelik Filtresi -->
+                            <div class="form-group mt-4"
+                                style="padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                <label class="form-label">
+                                    <i data-lucide="star"
+                                        style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
+                                    Öncelik Filtresi
+                                </label>
+                                <div class="flex gap-4 flex-wrap">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" name="oncelikFiltre" value="5" checked>
+                                        <span class="priority-badge priority-5">⭐⭐⭐⭐⭐ Kritik</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" name="oncelikFiltre" value="4" checked>
+                                        <span class="priority-badge priority-4">⭐⭐⭐⭐ Yüksek</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" name="oncelikFiltre" value="3" checked>
+                                        <span class="priority-badge priority-3">⭐⭐⭐ Normal</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" name="oncelikFiltre" value="2">
+                                        <span class="priority-badge priority-2">⭐⭐ Düşük</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" name="oncelikFiltre" value="1">
+                                        <span class="priority-badge priority-1">⭐ Opsiyonel</span>
+                                    </label>
+                                </div>
+                                <div class="form-hint">💡 Minimum kadro için sadece Kritik + Yüksek seçin</div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-primary btn-lg" id="hesaplaBtn">
+                                    <i data-lucide="calculator"></i>
+                                    Hesapla
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pozisyon Bazlı Parametreler -->
+                        <div id="pozisyonParametreler" class="hidden">
+                            <div class="table-container mb-4" style="max-height: 300px; overflow-y: auto;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Pozisyon</th>
+                                            <th>Departman</th>
+                                            <th style="width: 140px;">Aylık Çalışma Saati</th>
+                                            <th style="width: 140px;">Verimlilik</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pozisyonParametreTable"></tbody>
+                                </table>
+                            </div>
+                            <button class="btn btn-primary btn-lg" id="hesaplaBtnPozisyon">
+                                <i data-lucide="calculator"></i>
+                                Pozisyon Bazlı Hesapla
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sonuç Alanı -->
+                <div id="sonucAlani" class="hidden">
+                    <!-- Özet -->
+                    <div class="report-grid mb-4">
+                        <div class="report-summary">
+                            <h3>Toplam Mevcut Personel</h3>
+                            <div class="value" id="toplamMevcut">0</div>
+                        </div>
+                        <div class="report-summary" style="background: linear-gradient(135deg, #10b981, #059669)">
+                            <h3>Toplam Gerekli Personel</h3>
+                            <div class="value" id="toplamGerekli">0</div>
+                        </div>
+                        <div class="report-summary" style="background: linear-gradient(135deg, #f59e0b, #d97706)">
+                            <h3>Fark</h3>
+                            <div class="value" id="toplamFark">0</div>
+                        </div>
+                        <div class="report-summary" style="background: linear-gradient(135deg, #ef4444, #dc2626)">
+                            <h3>Mesai İhtiyacı</h3>
+                            <div class="value" id="toplamMesai">0 saat</div>
+                        </div>
+                    </div>
+
+                    <!-- Rapor Tablosu -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="table"></i>
+                                Norm Kadro Raporu
+                            </h2>
+                            <div class="flex gap-2">
+                                <button class="btn btn-success btn-sm" onclick="exportOzetRapor()">
+                                    <i data-lucide="download"></i>
+                                    Özet Rapor
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="exportDetayRapor()">
+                                    <i data-lucide="file-spreadsheet"></i>
+                                    Detay Rapor
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Pozisyon</th>
+                                            <th>Departman</th>
+                                            <th class="text-center">Mevcut</th>
+                                            <th class="text-center">Gerekli</th>
+                                            <th class="text-center">Fark</th>
+                                            <th class="text-center">Mesai İhtiyacı</th>
+                                            <th>Durum</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="raporTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="../libs/xlsx.full.min.js"></script>
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/hesaplama.js"></script>
+</body>
+
+</html>
+
+

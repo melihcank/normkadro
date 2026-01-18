@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norm Kadro Hesaplama</title>
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="index.html" class="nav-link active">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="pages/personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="pages/organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="pages/is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="pages/gorevler.html" class="nav-link">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="pages/is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="pages/standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                    <a href="pages/zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Etüdü</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="pages/hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Dashboard</h1>
+                <div class="header-actions">
+                    <input type="file" id="excelImportInput" accept=".xlsx,.xls" style="display:none"
+                        onchange="handleExcelImport(event)">
+                    <button class="btn btn-primary btn-sm"
+                        onclick="document.getElementById('excelImportInput').click()">
+                        <i data-lucide="upload"></i>
+                        Excel İçe Aktar
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="exportAllToExcel()">
+                        <i data-lucide="download"></i>
+                        Excel Dışa Aktar
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="loadSampleDataBtn()">
+                        <i data-lucide="database"></i>
+                        Örnek Veri
+                    </button>
+                    <button class="btn btn-ghost btn-sm text-danger" onclick="resetDBBtn()">
+                        <i data-lucide="trash-2"></i>
+                        Sıfırla
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Özet Kartları -->
+                <div class="grid grid-cols-4 mb-4">
+                    <div class="card stat-card">
+                        <div class="stat-icon blue">
+                            <i data-lucide="briefcase"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Pozisyonlar</h3>
+                            <div class="stat-value" id="statPozisyon">0</div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon purple">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Personel</h3>
+                            <div class="stat-value" id="statPersonel">0</div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon green">
+                            <i data-lucide="list-checks"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Görevler</h3>
+                            <div class="stat-value" id="statGorev">0</div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon orange">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Standart Zamanlar</h3>
+                            <div class="stat-value" id="statZaman">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hızlı Erişim -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i data-lucide="rocket"></i>
+                            Hızlı Başlangıç
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-2">
+                            <div class="alert alert-info">
+                                <i data-lucide="info"></i>
+                                <div>
+                                    <strong>Norm Kadro Nasıl Hesaplanır?</strong>
+                                    <p class="mt-2">1. İş Analizi: Pozisyon ve görevleri tanımlayın</p>
+                                    <p>2. Personel: Kişi bilgilerini girin</p>
+                                    <p>3. İş Yükü: Her görev için hacim girin</p>
+                                    <p>4. Standart Zaman: Süreleri belirleyin</p>
+                                    <p>5. Hesaplama: Norm kadro raporunu oluşturun</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="mb-3">Hızlı Linkler</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="pages/personel.html" class="btn btn-primary">
+                                        <i data-lucide="user-plus"></i>
+                                        Personel Ekle
+                                    </a>
+                                    <a href="pages/organizasyon.html" class="btn btn-secondary">
+                                        <i data-lucide="git-branch"></i>
+                                        Org. Şeması
+                                    </a>
+                                    <a href="pages/hesaplama.html" class="btn btn-success">
+                                        <i data-lucide="calculator"></i>
+                                        Hesapla
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="libs/sql-wasm.js"></script>
+    <script src="libs/xlsx.full.min.js"></script>
+    <script src="libs/lucide.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            showLoading();
+            try {
+                await initDB();
+                loadDashboardStats();
+            } catch (error) {
+                showNotification('Veritabanı başlatılamadı: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+                lucide.createIcons();
+            }
+        });
+
+        function loadDashboardStats() {
+            const stats = getDashboardStats();
+            document.getElementById('statPozisyon').textContent = stats.pozisyonSayisi;
+            document.getElementById('statPersonel').textContent = stats.personelSayisi;
+            document.getElementById('statGorev').textContent = stats.gorevSayisi;
+            document.getElementById('statZaman').textContent = stats.standartZamanSayisi;
+        }
+
+        async function loadSampleDataBtn() {
+            const confirmed = await showConfirmDialog(
+                'Örnek Veri Yükle',
+                'Örnek veriler yüklenecek. Devam etmek istiyor musunuz?'
+            );
+
+            if (confirmed) {
+                try {
+                    loadSampleData();
+                    loadDashboardStats();
+                    showNotification('Örnek veriler yüklendi', 'success');
+                } catch (error) {
+                    showNotification('Hata: ' + error.message, 'error');
+                }
+            }
+        }
+
+        async function resetDBBtn() {
+            const confirmed = await showConfirmDialog(
+                'Veritabanını Sıfırla',
+                'Tüm veriler silinecek! Bu işlem geri alınamaz.'
+            );
+
+            if (confirmed) {
+                try {
+                    resetDB();
+                    loadDashboardStats();
+                    showNotification('Veritabanı sıfırlandı', 'success');
+                } catch (error) {
+                    showNotification('Hata: ' + error.message, 'error');
+                }
+            }
+        }
+    </script>
+
+    <script>
+        // Service Worker kayıt
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="../manifest.json">
+    <title>Görevler - Norm Kadro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="calculator"></i>
+                    <span>Norm Kadro</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Ana Menü</div>
+                    <a href="../index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Organizasyon</div>
+                    <a href="personel.html" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Personel</span>
+                    </a>
+                    <a href="organizasyon.html" class="nav-link">
+                        <i data-lucide="git-branch"></i>
+                        <span>Org. Şeması</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Veri Girişi</div>
+                    <a href="is-analizi.html" class="nav-link">
+                        <i data-lucide="briefcase"></i>
+                        <span>Pozisyonlar</span>
+                    </a>
+                    <a href="gorevler.html" class="nav-link active">
+                        <i data-lucide="list-checks"></i>
+                        <span>Görevler</span>
+                    </a>
+                    <a href="is-yuku.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>İş Yükü</span>
+                    </a>
+                    <a href="standart-zaman.html" class="nav-link">
+                        <i data-lucide="clock"></i>
+                        <span>Standart Zaman</span>
+                    </a>
+                                    <a href="zaman-etudu.html" class="nav-link">
+                        <i data-lucide="timer"></i>
+                        <span>Zaman Et�d�</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Raporlama</div>
+                    <a href="hesaplama.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Hesaplama</span>
+                    </a>
+                    </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir"></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="header-title">Görevler</h1>
+                <div class="header-actions">
+                    <button class="btn btn-warning btn-sm" onclick="senkronizeMatris()"
+                        title="Görev listesindeki atamaları matrise 3 yıldız olarak aktar">
+                        <i data-lucide="refresh-cw"></i>
+                        Matrise Aktar
+                    </button>
+                    <button class="btn btn-primary" onclick="openNewGorevModal()">
+                        <i data-lucide="plus"></i>
+                        Yeni Görev
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Tabs -->
+                <div class="tabs mb-4">
+                    <button class="tab active" data-tab="gorevListesi" onclick="switchTab('gorevListesi')">
+                        <i data-lucide="list"></i>
+                        Görev Listesi
+                    </button>
+                    <button class="tab" data-tab="gorevMatrisi" onclick="switchTab('gorevMatrisi')">
+                        <i data-lucide="grid-3x3"></i>
+                        Görev Matrisi
+                    </button>
+                </div>
+
+                <!-- Görev Listesi Tab -->
+                <div id="gorevListesiTab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="list-checks"></i>
+                                Görev Listesi
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Görev Adı</th>
+                                            <th>Görev Önemi</th>
+                                            <th>Atanan Pozisyonlar</th>
+                                            <th>Açıklama</th>
+                                            <th style="width: 100px;">İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="gorevTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Görev Matrisi Tab -->
+                <div id="gorevMatrisiTab" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="grid-3x3"></i>
+                                Görev Matrisi
+                            </h2>
+                            <div class="form-hint" style="margin-left: auto;">
+                                ⭐ Devralma sırası: Yüksek yıldız = önce iş alır, kapasite dolarsa düşük yıldızlıya geçer
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-4">
+                                <label class="form-label">Pozisyon Filtrele</label>
+                                <select class="form-select" id="matrixPozisyonFilter" onchange="loadGorevMatrix()">
+                                    <option value="">Tüm Pozisyonlar</option>
+                                </select>
+                            </div>
+                            <div class="table-container" style="overflow-x: auto;">
+                                <table class="table" id="matrixTable">
+                                    <thead id="matrixHeader"></thead>
+                                    <tbody id="matrixBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Görev Modal -->
+    <div class="modal-overlay" id="gorevModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="modalTitle">Yeni Görev</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="gorevForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Görev Adı *</label>
+                        <input type="text" class="form-input" id="gorevAdi" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Açıklama</label>
+                        <textarea class="form-input" id="gorevAciklama" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Atanan Pozisyonlar *</label>
+                        <div class="form-hint mb-2">Bu görevi yapan pozisyonları seçin</div>
+                        <div id="pozisyonCheckboxes" class="checkbox-grid"></div>
+                    </div>
+
+                    <!-- Görev Önemi (Hesaplama Sırası) -->
+                    <div class="form-group"
+                        style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <label class="form-label">
+                            <i data-lucide="target"
+                                style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
+                            Görev Önemi
+                        </label>
+                        <div class="form-hint mb-2">Kritik görevler hesaplamada önce işlenir, kapasite garantisi alır
+                        </div>
+                        <div id="oncelikSecim">
+                            <label class="priority-option" onclick="selectPriority(1)">
+                                <input type="radio" name="oncelik" value="1">
+                                <span class="priority-option-stars">⭐</span>
+                                <div class="priority-option-content">
+                                    <div class="priority-option-name">Opsiyonel</div>
+                                    <div class="priority-option-desc">Yapılmazsa da olur</div>
+                                </div>
+                            </label>
+                            <label class="priority-option" onclick="selectPriority(2)">
+                                <input type="radio" name="oncelik" value="2">
+                                <span class="priority-option-stars">⭐⭐</span>
+                                <div class="priority-option-content">
+                                    <div class="priority-option-name">Düşük</div>
+                                    <div class="priority-option-desc">Ertelenebilir</div>
+                                </div>
+                            </label>
+                            <label class="priority-option selected" onclick="selectPriority(3)">
+                                <input type="radio" name="oncelik" value="3" checked>
+                                <span class="priority-option-stars">⭐⭐⭐</span>
+                                <div class="priority-option-content">
+                                    <div class="priority-option-name">Normal</div>
+                                    <div class="priority-option-desc">Standart iş akışı</div>
+                                </div>
+                            </label>
+                            <label class="priority-option" onclick="selectPriority(4)">
+                                <input type="radio" name="oncelik" value="4">
+                                <span class="priority-option-stars">⭐⭐⭐⭐</span>
+                                <div class="priority-option-content">
+                                    <div class="priority-option-name">Yüksek</div>
+                                    <div class="priority-option-desc">İş sürekliliği için önemli</div>
+                                </div>
+                            </label>
+                            <label class="priority-option" onclick="selectPriority(5)">
+                                <input type="radio" name="oncelik" value="5">
+                                <span class="priority-option-stars">⭐⭐⭐⭐⭐</span>
+                                <div class="priority-option-content">
+                                    <div class="priority-option-name">Kritik</div>
+                                    <div class="priority-option-desc">Yasal zorunluluk, durdurulamaz</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="confirmTitle">Onay</h2>
+                <button class="modal-close" onclick="closeModal('confirmModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirmCancel">İptal</button>
+                <button class="btn btn-danger" id="confirmOk">Onayla</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Scripts -->
+    <script src="../libs/lucide.min.js"></script>
+    <script src="../libs/sql-wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/gorevler.js"></script>
+
+    <style>
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .tab.active {
+            color: var(--primary-600);
+            border-bottom-color: var(--primary-500);
+        }
+
+        .tab-content.hidden {
+            display: none;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.5rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .pozisyon-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        #matrixTable th,
+        #matrixTable td {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        #matrixTable th:first-child,
+        #matrixTable td:first-child {
+            text-align: left;
+            min-width: 200px;
+            position: sticky;
+            left: 0;
+            background: var(--bg-secondary);
+            z-index: 1;
+        }
+
+        #matrixTable thead th {
+            position: sticky;
+            top: 0;
+            background: var(--bg-tertiary);
+            z-index: 2;
+        }
+
+        #matrixTable thead th:first-child {
+            z-index: 3;
+        }
+
+        .matrix-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    </style>
+</body>
+
+</html>
+
+
