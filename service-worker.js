@@ -1,4 +1,4 @@
-const CACHE_NAME = 'norm-kadro-v1';
+const CACHE_NAME = 'norm-kadro-v2';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -14,7 +14,6 @@ const ASSETS_TO_CACHE = [
     './js/config.js',
     './js/db.js',
     './js/utils.js',
-    './js/dashboard.js',
     './js/personel.js',
     './js/organizasyon.js',
     './js/is-analizi.js',
@@ -27,10 +26,10 @@ const ASSETS_TO_CACHE = [
     './libs/sql-wasm.wasm',
     './libs/xlsx.full.min.js',
     './libs/lucide.min.js',
-    './fonts/Inter-Regular.woff2',
-    './fonts/Inter-Medium.woff2',
-    './fonts/Inter-SemiBold.woff2',
-    './fonts/Inter-Bold.woff2',
+    './libs/html2canvas.min.js',
+    './libs/jspdf.umd.min.js',
+    './icons/icon-192.png',
+    './icons/icon-512.png',
     './manifest.json'
 ];
 

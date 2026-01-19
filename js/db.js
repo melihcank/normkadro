@@ -8,8 +8,12 @@ let SQL = null;
 
 async function initDB() {
     try {
+        // Sayfa konumuna göre doğru libs yolunu belirle
+        const isInPages = window.location.pathname.includes('/pages/');
+        const libsPath = isInPages ? '../libs/' : 'libs/';
+
         SQL = await initSqlJs({
-            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+            locateFile: file => `${libsPath}${file}`
         });
 
         const savedDB = loadDBFromStorage();
